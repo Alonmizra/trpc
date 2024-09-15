@@ -20,14 +20,15 @@ This library enables usage directly within React components
 import { trpc } from '../utils/trpc';
 
 export default function IndexPage() {
-  const helloQuery = trpc.hello.useQuery({ name: 'Bob' });
-  const goodbyeMutation = trpc.goodbye.useMutation();
+  const { data, isLoading } = trpc.hello.useQuery({ name: 'Bob' });
+  const {mutate: goodbye, isPending } = trpc.goodbye.useMutation();
 
   return (
     <div>
-      <p>{helloQuery.data?.greeting}</p>
+      {isLoading || isPending ? <Loader /> : null}
+      <p>{data?.greeting}</p>
 
-      <button onClick={() => goodbyeMutation.mutate()}>Say Goodbye</button>
+      <button onClick={() => goodbye()}>Say Goodbye</button>
     </div>
   );
 }
